@@ -15,6 +15,9 @@ const ALLOWED_DOC_TYPES = [
 const ALLOWED_CHAT_FILE_TYPES = [
   ...ALLOWED_IMAGE_TYPES,
   'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'image/gif',
   'audio/mpeg',
   'audio/wav',
   'audio/ogg',
@@ -117,7 +120,7 @@ export class UploadService {
 
   async uploadChatFile(userId: string, file: Express.Multer.File) {
     if (!ALLOWED_CHAT_FILE_TYPES.includes(file.mimetype)) {
-      throw new BadRequestException('Invalid file type. Allowed: JPEG, PNG, WebP, PDF, MP3, WAV, OGG, WebM');
+      throw new BadRequestException('Invalid file type. Allowed: JPEG, PNG, WebP, PDF, DOC, DOCX, GIF, MP3, WAV, OGG, WebM');
     }
 
     const maxImageSize = 5 * 1024 * 1024;

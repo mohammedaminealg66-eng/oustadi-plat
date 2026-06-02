@@ -133,12 +133,19 @@ export default function ChatPage({ dashboardHref }: { dashboardHref: string }) {
     s.on('chat:message', msgHandler);
     s.on('typing:start', typingStartHandler);
     s.on('typing:stop', typingStopHandler);
+    const errorHandler = (err: { message: string }) => {
+      setUploadError(err.message);
+      setTimeout(() => setUploadError(null), 4000);
+    };
+
     s.on('chat:read', readHandler);
+    s.on('chat:error', errorHandler);
     return () => {
       s.off('chat:message', msgHandler);
       s.off('typing:start', typingStartHandler);
       s.off('typing:stop', typingStopHandler);
       s.off('chat:read', readHandler);
+      s.off('chat:error', errorHandler);
     };
   }, [authLoading, user, router]);
 
