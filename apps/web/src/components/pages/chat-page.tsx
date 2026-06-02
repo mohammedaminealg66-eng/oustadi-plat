@@ -76,6 +76,7 @@ export default function ChatPage({ dashboardHref }: { dashboardHref: string }) {
   const [showMobileProfile, setShowMobileProfile] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
   const [recordingDuration, setRecordingDuration] = useState(0);
@@ -177,6 +178,7 @@ export default function ChatPage({ dashboardHref }: { dashboardHref: string }) {
   async function sendFile(file: File, type: string) {
     if (!activeConv) return;
     setUploadingFile(true);
+    setUploadError(null);
     const fd = new FormData();
     fd.append('file', file);
     const res = await apiRequest('/upload/chat-file', { method: 'POST', body: fd, skipAuth: false, headers: {} as any });
@@ -194,6 +196,9 @@ export default function ChatPage({ dashboardHref }: { dashboardHref: string }) {
         mimeType: data.mimeType,
         duration: type === 'VOICE' ? recordingDuration : undefined,
       });
+    } else {
+      setUploadError(res.error || c('error'));
+      setTimeout(() => setUploadError(null), 4000);
     }
   }
 
@@ -449,6 +454,12 @@ export default function ChatPage({ dashboardHref }: { dashboardHref: string }) {
                   <Button size="sm" onClick={sendRecording}><Send className="h-4 w-4" /></Button>
                   <button onClick={cancelRecording} className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-700"><X className="h-5 w-5" /></button>
                 </div>
+              </div>
+            )}
+
+            {uploadError && (
+              <div className="border-t bg-red-50 px-4 py-2 text-center text-xs text-red-600 dark:border-gray-700 dark:bg-red-900/20 dark:text-red-400">
+                {uploadError}
               </div>
             )}
 

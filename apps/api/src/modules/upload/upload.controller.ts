@@ -10,11 +10,11 @@ import { Role } from '@prisma/client';
 
 @Controller('upload')
 @UseGuards(AuthGuard('jwt'))
+@UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
 export class UploadController {
   constructor(private upload: UploadService) {}
 
   @Post('avatar')
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   uploadAvatar(@CurrentUser('userId') userId: string, @UploadedFile() file: Express.Multer.File) {
     return this.upload.uploadAvatar(userId, file);
   }
@@ -22,7 +22,6 @@ export class UploadController {
   @Post('document')
   @UseGuards(RolesGuard)
   @Roles(Role.TEACHER)
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   uploadDocument(@CurrentUser('userId') userId: string, @UploadedFile() file: Express.Multer.File) {
     return this.upload.uploadDocument(userId, file);
   }
@@ -33,7 +32,6 @@ export class UploadController {
   }
 
   @Post('chat-file')
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
   uploadChatFile(@CurrentUser('userId') userId: string, @UploadedFile() file: Express.Multer.File) {
     return this.upload.uploadChatFile(userId, file);
   }

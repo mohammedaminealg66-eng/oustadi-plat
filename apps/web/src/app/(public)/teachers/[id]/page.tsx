@@ -92,6 +92,7 @@ export default function TeacherProfilePage() {
   const [reportDescription, setReportDescription] = useState('');
   const [sendingReport, setSendingReport] = useState(false);
   const [reportSent, setReportSent] = useState(false);
+  const [reportError, setReportError] = useState('');
 
   const dayT = useTranslations('days');
   const [reviewRating, setReviewRating] = useState(0);
@@ -100,6 +101,7 @@ export default function TeacherProfilePage() {
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [reviewError, setReviewError] = useState('');
   const [existingReview, setExistingReview] = useState<{ rating: number; comment: string | null; requestId: string | null } | null>(null);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   useEffect(() => {
     async function fetch() {
@@ -224,6 +226,7 @@ export default function TeacherProfilePage() {
   async function handleReport() {
     if (!reportReason) return;
     setSendingReport(true);
+    setReportError('');
     const res = await apiRequest(`/teachers/${id}/report`, {
       method: 'POST',
       body: JSON.stringify({ reason: reportReason, description: reportDescription || undefined }),
@@ -231,7 +234,9 @@ export default function TeacherProfilePage() {
     setSendingReport(false);
     if (res.success) {
       setReportSent(true);
-      setTimeout(() => { setShowReportModal(false); setReportSent(false); setReportReason(''); setReportDescription(''); }, 2000);
+      setTimeout(() => { setShowReportModal(false); setReportSent(false); setReportReason(''); setReportDescription(''); setReportError(''); }, 2000);
+    } else {
+      setReportError(res.error || t('requestFailed'));
     }
   }
 
@@ -373,11 +378,11 @@ export default function TeacherProfilePage() {
                         <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl bg-yellow-50 flex items-center justify-center"><Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-yellow-500 fill-yellow-500" /></div>
                         {t('studentTestimonials')}
                      </h2>
-                     <Button variant="ghost" className="font-bold text-xs sm:text-sm text-primary-600">{d('viewAll')}</Button>
-                  </div>
+                      <Button variant="ghost" className="font-bold text-xs sm:text-sm text-primary-600" onClick={() => setShowAllReviews(true)}>{d('viewAll')}</Button>
+                   </div>
 
-                  <div className="grid gap-3 sm:gap-4">
-                     {profile.reviews.slice(0, 3).map((review) => (
+                   <div className="grid gap-3 sm:gap-4">
+                      {profile.reviews.slice(0, 3).map((review) => (
                         <div key={review.id} className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-all hover:bg-white hover:shadow-md">
                            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
                               <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 overflow-hidden shadow-sm">
@@ -395,7 +400,43 @@ export default function TeacherProfilePage() {
                        </div>
                      ))}
                   </div>
-                </section>
+                 </section>
+
+               {showAllReviews && (
+                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setShowAllReviews(false)}>
+                   <div className="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto p-5 sm:p-8 mx-2 sm:mx-0" onClick={e => e.stopPropagation()}>
+                     <div className="flex items-center justify-between mb-4">
+                       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{t('studentTestimonials')}</h3>
+                       <button onClick={() => setShowAllReviews(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700">
+                         <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                       </button>
+                     </div>
+                     <div className="space-y-3">
+                       {profile.reviews.length > 0 ? (
+                         profile.reviews.map((review) => (
+                           <div key={review.id} className="p-4 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600">
+                             <div className="flex items-center gap-2 mb-2">
+                               <div className="h-8 w-8 rounded-lg bg-white dark:bg-gray-600 border border-gray-100 dark:border-gray-500 overflow-hidden shadow-sm">
+                                 {review.student.avatarKey
+                                   ? <img src={getAvatarUrl(review.student.avatarKey)} alt="" className="h-full w-full object-cover" />
+                                   : <div className="h-full w-full flex items-center justify-center font-bold bg-primary-50 text-primary-600 text-xs">{review.student.fullName.charAt(0)}</div>
+                                 }
+                               </div>
+                               <div>
+                                 <p className="font-bold text-gray-900 dark:text-gray-100 text-xs">{review.student.fullName}</p>
+                                 <StarRating rating={review.rating} size="sm" />
+                               </div>
+                             </div>
+                             {review.comment && <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed italic">"{review.comment}"</p>}
+                           </div>
+                         ))
+                       ) : (
+                         <p className="text-center py-8 text-sm text-gray-400 dark:text-gray-500">{t('noReviews')}</p>
+                       )}
+                     </div>
+                   </div>
+                 </div>
+               )}
 
               {/* Review Submission Form */}
               {user?.role === 'STUDENT' && (
@@ -687,6 +728,7 @@ export default function TeacherProfilePage() {
                     onChange={e => setReportDescription(e.target.value)}
                   />
                 </div>
+                {reportError && <p className="text-sm text-red-600 text-center font-medium">{reportError}</p>}
                 <Button
                   className="w-full h-14 rounded-2xl font-bold text-base shadow-lg"
                   onClick={handleReport}
