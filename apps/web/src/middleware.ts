@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const publicPaths = ['/login', '/register', '/forgot-password', '/teachers', '/reset-password', '/verify-email', '/auth/callback'];
+const publicPaths = ['/login', '/register', '/forgot-password', '/teachers', '/reset-password', '/verify-email', '/auth/callback', '/terms', '/privacy'];
 const authPages = ['/login', '/register'];
 
 function decodeToken(token: string): { role?: string } | null {
