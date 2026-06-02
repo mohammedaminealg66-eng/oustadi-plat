@@ -122,11 +122,11 @@ export function TeacherHeader({
   );
 
   const statsRow = (
-    <div className="flex justify-center space-x-6 bg-gray-50 py-3 rounded-lg">
+    <div className="flex justify-center space-x-6 bg-gray-50 dark:bg-gray-800 py-3 rounded-lg">
       {stats.map((stat) => (
         <div key={stat.label} className="text-center">
-          <p className="text-lg font-bold text-gray-900">{stat.value}</p>
-          <p className="text-xs font-medium text-gray-500">{stat.label}</p>
+          <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
+          <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{stat.label}</p>
         </div>
       ))}
     </div>
@@ -210,13 +210,13 @@ export function TeacherHeader({
      Mobile: avatar + info side-by-side (avatar 56px, flex-shrink-0), buttons full-width.
   */
   return (
-    <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-4 sm:p-5">
+    <div className="bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 rounded-xl p-4 sm:p-5">
       {/* Identity block: avatar + info side-by-side */}
       <div className="flex gap-3 sm:gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
           <div className="relative">
-            <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-full bg-white p-0.5 shadow-sm border-2 border-gray-100">
+            <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-full bg-white dark:bg-gray-700 p-0.5 shadow-sm border-2 border-gray-100 dark:border-gray-600">
               {avatarKey ? (
                 <img src={avatarSrc} alt={`${name}'s avatar`} className="h-full w-full rounded-full object-cover" />
               ) : (
@@ -235,7 +235,7 @@ export function TeacherHeader({
         <div className="min-w-0 flex-1">
           {/* Name + Badge + Favorite */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">{name}</h1>
+            <h1 className="text-base sm:text-xl font-bold text-gray-900 dark:text-gray-100 truncate">{name}</h1>
             {isOfficial ? <OfficialBadge className="text-[9px] h-5 sm:text-[10px]" /> : isVerified ? <VerifiedBadge className="text-[9px] h-5 sm:text-[10px]" /> : null}
             <button
               onClick={onToggleFav}
@@ -249,7 +249,7 @@ export function TeacherHeader({
 
           {/* Subject */}
           {subjectDisplay && (
-            <p className="text-xs sm:text-sm text-gray-500 mt-0.5 truncate">{subjectDisplay}</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">{subjectDisplay}</p>
           )}
 
           {/* Rating */}
@@ -258,8 +258,8 @@ export function TeacherHeader({
               <span className="inline-flex items-center text-yellow-500" role="img" aria-label={`${avgRating.toFixed(1)} star rating`}>
                 <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-yellow-400" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
               </span>
-              <span className="text-sm sm:text-base font-semibold text-gray-900">{avgRating.toFixed(1)}</span>
-              <span className="text-xs text-gray-500">({reviewCount} {t('reviews')})</span>
+              <span className="text-sm sm:text-base font-semibold text-gray-900 dark:text-gray-100">{avgRating.toFixed(1)}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">({reviewCount} {t('reviews')})</span>
             </div>
           )}
 
@@ -278,11 +278,11 @@ export function TeacherHeader({
       </div>
 
       {/* Stats Row */}
-      <div className="mt-3 sm:mt-4 bg-gray-50 rounded-lg py-2.5 sm:py-3 px-3 grid grid-cols-4 gap-1 sm:gap-2">
+      <div className="mt-3 sm:mt-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg py-2.5 sm:py-3 px-3 grid grid-cols-4 gap-1 sm:gap-2">
         {stats.map((stat) => (
           <div key={stat.label} className="text-center min-w-0">
-            <p className="text-sm sm:text-base font-bold text-gray-900 truncate">{stat.value}</p>
-            <p className="text-[9px] sm:text-[11px] font-medium text-gray-500 truncate">{stat.label}</p>
+            <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-100 truncate">{stat.value}</p>
+            <p className="text-[9px] sm:text-[11px] font-medium text-gray-500 dark:text-gray-400 truncate">{stat.label}</p>
           </div>
         ))}
       </div>

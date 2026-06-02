@@ -27,5 +27,5 @@ export function CardContent({ className, children }: CardProps) {
 }
 
 export function CardFooter({ className, children }: CardProps) {
-  return <div className={cn('px-6 py-4 bg-gray-50/30 border-t border-gray-50/50', className)}>{children}</div>;
+  return <div className={cn('px-6 py-4 bg-gray-50/30 border-t border-gray-50/50 dark:bg-gray-800/30 dark:border-gray-700/50', className)}>{children}</div>;
 }

@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         source: '/api/:path*',
         destination: `${process.env.API_INTERNAL_URL || 'http://api:3000'}/api/:path*`,
       },
+      {
+        source: '/uploads/:path*',
+        destination: `${process.env.API_INTERNAL_URL || 'http://api:3000'}/uploads/:path*`,
+      },
     ];
   },
   async headers() {

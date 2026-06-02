@@ -49,7 +49,7 @@ export function SocialLinks({ links, className }: SocialLinksProps) {
           rel="noopener noreferrer"
           title={p.label}
           className={cn(
-            "flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50 text-gray-400 transition-all hover:bg-white hover:shadow-xl hover:scale-110 active:scale-95 border border-gray-100",
+            "flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-500 transition-all hover:bg-white dark:hover:bg-gray-700 hover:shadow-xl hover:scale-110 active:scale-95 border border-gray-100 dark:border-gray-700",
             p.color
           )}
         >

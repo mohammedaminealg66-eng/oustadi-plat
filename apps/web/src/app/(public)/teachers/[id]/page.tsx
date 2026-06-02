@@ -87,6 +87,11 @@ export default function TeacherProfilePage() {
   const [bookingMessage, setBookingMessage] = useState('');
   const [sendingRequest, setSendingRequest] = useState(false);
   const [requestError, setRequestError] = useState('');
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [reportDescription, setReportDescription] = useState('');
+  const [sendingReport, setSendingReport] = useState(false);
+  const [reportSent, setReportSent] = useState(false);
 
   const dayT = useTranslations('days');
   const [reviewRating, setReviewRating] = useState(0);
@@ -210,6 +215,26 @@ export default function TeacherProfilePage() {
     }
   }
 
+  function handleShare() {
+    navigator.clipboard.writeText(window.location.href);
+    setShareDone(true);
+    setTimeout(() => setShareDone(false), 2000);
+  }
+
+  async function handleReport() {
+    if (!reportReason) return;
+    setSendingReport(true);
+    const res = await apiRequest(`/teachers/${id}/report`, {
+      method: 'POST',
+      body: JSON.stringify({ reason: reportReason, description: reportDescription || undefined }),
+    });
+    setSendingReport(false);
+    if (res.success) {
+      setReportSent(true);
+      setTimeout(() => { setShowReportModal(false); setReportSent(false); setReportReason(''); setReportDescription(''); }, 2000);
+    }
+  }
+
   const daysAvail = useMemo(() => {
     const d = profile?.availability ?? [];
     const days = Array.from({ length: 7 }, (_, i) => ({
@@ -239,12 +264,12 @@ export default function TeacherProfilePage() {
   }, [daysAvail]);
 
   if (loading) return <ProfileSkeleton locale={locale} />;
-  if (!profile) return <div className="py-32 text-center font-bold text-xl text-gray-400">{t('notFound')}</div>;
+  if (!profile) return <div className="py-32 text-center font-bold text-xl text-gray-400 dark:text-gray-500">{t('notFound')}</div>;
 
   const mainSubject = profile.subjects[0];
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen dark:bg-gray-900">
       {/* 1. Profile Header Section */}
       <section>
         <div className="mx-auto max-w-6xl px-4 pt-4 sm:pt-6">
@@ -279,13 +304,13 @@ export default function TeacherProfilePage() {
                <section className="space-y-4 sm:space-y-6">
                   <div className="flex flex-col gap-4 sm:gap-6">
                      <div className="space-y-2 sm:space-y-3">
-                        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">{t('about')}</h2>
-                        <p className="text-sm sm:text-base text-gray-600 leading-relaxed whitespace-pre-line">
+                         <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">{t('about')}</h2>
+                         <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line">
                            {profile.bio}
                         </p>
                      </div>
                      <div>
-                        <h3 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 sm:mb-3">{t('socialLinks')}</h3>
+                         <h3 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 sm:mb-3">{t('socialLinks')}</h3>
                         <SocialLinks 
                           links={{
                             facebook: profile.facebookUrl,
@@ -305,7 +330,7 @@ export default function TeacherProfilePage() {
              {/* Featured Content / Video */}
                {profile.introVideo && (
                  <section className="space-y-4 sm:space-y-6">
-                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2 sm:gap-3">
+                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2 sm:gap-3">
                        <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl bg-red-50 flex items-center justify-center"><Video className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-red-600" /></div>
                        {t('introVideo')}
                     </h2>
@@ -317,22 +342,22 @@ export default function TeacherProfilePage() {
 
              {/* Subjects Cards */}
                <section className="space-y-4 sm:space-y-6">
-                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2 sm:gap-3">
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2 sm:gap-3">
                      <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl bg-primary-50 flex items-center justify-center"><BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary-600" /></div>
                      {t('subjects')}
                   </h2>
                   <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                      {profile.subjects.map((s) => (
-                       <Card key={s.id} className="group border-none bg-white shadow-md sm:shadow-lg ring-1 ring-gray-100 transition-all hover:ring-primary-100 hover:shadow-xl">
-                          <CardContent className="p-4 sm:p-6">
-                             <h3 className="text-base sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">{subjectName(s.subject, locale)}</h3>
+                        <Card key={s.id} className="group border-none bg-white dark:bg-gray-800 shadow-md sm:shadow-lg ring-1 ring-gray-100 dark:ring-gray-700 transition-all hover:ring-primary-100 hover:shadow-xl">
+                           <CardContent className="p-4 sm:p-6">
+                              <h3 className="text-base sm:text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3">{subjectName(s.subject, locale)}</h3>
                              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
-                                {s.levels.map((l) => (
-                                  <Badge key={l} className="bg-gray-50 text-gray-600 border-none font-bold text-[9px] sm:text-[10px] py-0.5 sm:py-1 uppercase tracking-widest">{l}</Badge>
-                                ))}
-                             </div>
-                             <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-50">
-                                <span className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('price')}</span>
+                                 {s.levels.map((l) => (
+                                   <Badge key={l} className="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border-none font-bold text-[9px] sm:text-[10px] py-0.5 sm:py-1 uppercase tracking-widest">{l}</Badge>
+                                 ))}
+                              </div>
+                              <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-50 dark:border-gray-700">
+                                 <span className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{t('price')}</span>
                                 <p className="text-lg sm:text-2xl font-bold text-primary-600">{s.price || profile.price} <span className="text-[10px] sm:text-xs text-gray-400">{t('dh')}/H</span></p>
                              </div>
                           </CardContent>
@@ -344,29 +369,29 @@ export default function TeacherProfilePage() {
              {/* Testimonials / Reviews */}
                <section className="space-y-4 sm:space-y-6">
                   <div className="flex items-center justify-between">
-                     <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2 sm:gap-3">
+                     <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2 sm:gap-3">
                         <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl bg-yellow-50 flex items-center justify-center"><Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-yellow-500 fill-yellow-500" /></div>
                         {t('studentTestimonials')}
                      </h2>
-                     <Button variant="ghost" className="font-bold text-xs sm:text-sm text-primary-600">{c('viewAll')}</Button>
+                     <Button variant="ghost" className="font-bold text-xs sm:text-sm text-primary-600">{d('viewAll')}</Button>
                   </div>
 
                   <div className="grid gap-3 sm:gap-4">
                      {profile.reviews.slice(0, 3).map((review) => (
-                       <div key={review.id} className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gray-50 border border-gray-100 transition-all hover:bg-white hover:shadow-md">
-                          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-                             <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-white border border-gray-100 overflow-hidden shadow-sm">
+                        <div key={review.id} className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-all hover:bg-white hover:shadow-md">
+                           <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                              <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 overflow-hidden shadow-sm">
                                 {review.student.avatarKey 
                                   ? <img src={getAvatarUrl(review.student.avatarKey)} alt="" className="h-full w-full object-cover" />
                                   : <div className="h-full w-full flex items-center justify-center font-bold bg-primary-50 text-primary-600 text-xs sm:text-sm">{review.student.fullName.charAt(0)}</div>
                                 }
                              </div>
                              <div>
-                                <p className="font-bold text-gray-900 text-xs sm:text-sm">{review.student.fullName}</p>
+                                 <p className="font-bold text-gray-900 dark:text-gray-100 text-xs sm:text-sm">{review.student.fullName}</p>
                                 <StarRating rating={review.rating} size="sm" />
                              </div>
                           </div>
-                          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed italic">"{review.comment}"</p>
+                           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed italic">"{review.comment}"</p>
                        </div>
                      ))}
                   </div>
@@ -375,31 +400,31 @@ export default function TeacherProfilePage() {
               {/* Review Submission Form */}
               {user?.role === 'STUDENT' && (
                 <section className="space-y-4 sm:space-y-6">
-                   <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-2 sm:gap-3">
+                   <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100 flex items-center gap-2 sm:gap-3">
                       <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg sm:rounded-xl bg-primary-50 flex items-center justify-center"><MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary-600" /></div>
                       {t('reviewPromptSection')}
                    </h2>
-                   {reviewSubmitted || existingReview ? (
-                     <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-green-50 border border-green-200">
-                        <div className="flex items-center gap-2 mb-2">
-                          <StarRating rating={existingReview?.rating || reviewRating} size="sm" />
-                        </div>
-                        {existingReview?.comment && (
-                          <p className="text-green-800 text-sm sm:text-base italic mb-2">"{existingReview.comment}"</p>
-                        )}
-                        <p className="text-green-700 font-medium text-sm sm:text-base">{t('reviewSubmitted')}</p>
-                     </div>
-                   ) : (
-                     <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gray-50 border border-gray-100">
-                        <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">{t('reviewCompletedLesson')}</p>
+                    {reviewSubmitted || existingReview ? (
+                      <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+                         <div className="flex items-center gap-2 mb-2">
+                           <StarRating rating={existingReview?.rating || reviewRating} size="sm" />
+                         </div>
+                         {existingReview?.comment && (
+                           <p className="text-green-800 dark:text-green-200 text-sm sm:text-base italic mb-2">"{existingReview.comment}"</p>
+                         )}
+                         <p className="text-green-700 dark:text-green-300 font-medium text-sm sm:text-base">{t('reviewSubmitted')}</p>
+                      </div>
+                    ) : (
+                      <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+                         <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">{t('reviewCompletedLesson')}</p>
                         <div className="space-y-3 sm:space-y-4">
                            <div>
-                              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">{t('rating')}</label>
+                               <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">{t('rating')}</label>
                               <StarRatingInput rating={reviewRating} onChange={setReviewRating} size="md" />
                            </div>
                            <div>
                               <textarea
-                                className="w-full h-24 sm:h-28 rounded-xl border border-gray-200 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm resize-none text-gray-900"
+                                 className="w-full h-24 sm:h-28 rounded-xl border border-gray-200 dark:border-gray-600 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm resize-none text-gray-900 dark:text-gray-100 dark:bg-gray-700"
                                 placeholder={t('reviewPlaceholder')}
                                 value={reviewComment}
                                 onChange={(e) => setReviewComment(e.target.value)}
@@ -422,7 +447,7 @@ export default function TeacherProfilePage() {
 
           {/* 3. Sidebar Booking Column */}
           <div className="space-y-8 order-1 lg:order-2">
-              <Card className="lg:sticky lg:top-10 border-none bg-white shadow-xl ring-1 ring-gray-100 rounded-3xl overflow-hidden">
+               <Card className="lg:sticky lg:top-10 border-none bg-white dark:bg-gray-800 shadow-xl ring-1 ring-gray-100 dark:ring-gray-700 rounded-3xl overflow-hidden">
                  <CardContent className="p-0">
                      <div className="bg-gray-900 p-4 sm:p-6 text-white">
                         <div className="flex items-center justify-between mb-2 sm:mb-3 text-right flex-row-reverse">
@@ -436,7 +461,7 @@ export default function TeacherProfilePage() {
 
                      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
                         <div>
-                           <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2 sm:mb-3 block text-right">{t('availability')}</label>
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 sm:mb-3 block text-right">{t('availability')}</label>
                             <div className="flex gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-2 flex-row-reverse">
                                {dateOptions.slice(0, 5).map((opt) => (
                                  <button
@@ -469,28 +494,28 @@ export default function TeacherProfilePage() {
                            </Button>
                         </div>
 
-                       <div className="pt-6 border-t border-gray-50 space-y-3">
-                          <div className="flex items-center gap-3 text-right flex-row-reverse">
-                             <div className="h-7 w-7 rounded-full bg-emerald-50 flex items-center justify-center"><ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /></div>
-                             <div className="flex-1">
-                                <p className="text-xs font-bold text-gray-900 leading-none">{t('guarantee')}</p>
-                                <p className="text-[10px] text-gray-400 mt-1">{t('guaranteeDesc')}</p>
-                             </div>
-                          </div>
-                       </div>
+                        <div className="pt-6 border-t border-gray-50 dark:border-gray-700 space-y-3">
+                           <div className="flex items-center gap-3 text-right flex-row-reverse">
+                              <div className="h-7 w-7 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center"><ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /></div>
+                              <div className="flex-1">
+                                 <p className="text-xs font-bold text-gray-900 dark:text-gray-100 leading-none">{t('guarantee')}</p>
+                                 <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{t('guaranteeDesc')}</p>
+                              </div>
+                           </div>
+                        </div>
                     </div>
                  </CardContent>
               </Card>
 
-              {/* Secondary Actions Sidebar */}
-               <div className="p-2 sm:p-4 space-y-1 sm:space-y-2">
-                  <Button variant="ghost" className="w-full justify-start text-gray-500 font-bold h-9 sm:h-10 rounded-lg sm:rounded-xl hover:text-gray-900 group flex-row-reverse text-xs sm:text-sm">
-                     <Share2 className="ml-2 sm:ml-3 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover:text-primary-600" /> {t('shareProfile')}
-                  </Button>
-                  <Button variant="ghost" className="w-full justify-start text-gray-500 font-bold h-9 sm:h-10 rounded-lg sm:rounded-xl hover:text-red-600 group flex-row-reverse text-xs sm:text-sm">
-                     <Flag className="ml-2 sm:ml-3 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover:text-red-600" /> {t('reportProfile')}
-                  </Button>
-               </div>
+               {/* Secondary Actions Sidebar */}
+                <div className="p-2 sm:p-4 space-y-1 sm:space-y-2">
+                   <Button variant="ghost" className="w-full justify-start text-gray-500 dark:text-gray-400 font-bold h-9 sm:h-10 rounded-lg sm:rounded-xl hover:text-gray-900 group flex-row-reverse text-xs sm:text-sm" onClick={handleShare}>
+                      <Share2 className="ml-2 sm:ml-3 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover:text-primary-600" /> {shareDone ? t('shareSuccess') : t('shareProfile')}
+                   </Button>
+                   <Button variant="ghost" className="w-full justify-start text-gray-500 dark:text-gray-400 font-bold h-9 sm:h-10 rounded-lg sm:rounded-xl hover:text-red-600 group flex-row-reverse text-xs sm:text-sm" onClick={() => { if (!user) { router.push('/login'); return; } setShowReportModal(true); }}>
+                      <Flag className="ml-2 sm:ml-3 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover:text-red-600" /> {t('reportProfile')}
+                   </Button>
+                </div>
           </div>
         </div>
       </main>
@@ -498,15 +523,15 @@ export default function TeacherProfilePage() {
       {/* Booking Form Modal */}
       {showBookingForm && profile && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setShowBookingForm(false)}>
-          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md p-5 sm:p-8 space-y-4 sm:space-y-6 mx-2 sm:mx-0" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md p-5 sm:p-8 space-y-4 sm:space-y-6 mx-2 sm:mx-0" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">{t('sendLessonRequest')}</h3>
-              <button onClick={() => setShowBookingForm(false)} className="p-2 rounded-xl hover:bg-gray-100"><X className="h-5 w-5" /></button>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('sendLessonRequest')}</h3>
+              <button onClick={() => setShowBookingForm(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700"><X className="h-5 w-5 text-gray-500 dark:text-gray-400" /></button>
             </div>
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">{t('chooseSubject')}</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">{t('chooseSubject')}</label>
               <select
-                className="w-full h-12 rounded-2xl border border-gray-200 px-4 text-sm font-medium bg-white text-gray-900"
+                className="w-full h-12 rounded-2xl border border-gray-200 dark:border-gray-600 px-4 text-sm font-medium bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 value={selectedSubjectId}
                 onChange={e => setSelectedSubjectId(e.target.value)}
               >
@@ -518,7 +543,7 @@ export default function TeacherProfilePage() {
             </div>
             {/* Date + Time Selection */}
             <div>
-              <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">{t('date')}</label>
+              <label className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">{t('date')}</label>
               <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
                 {dateOptions.slice(0, 7).map((opt) => (
                   <button
@@ -527,8 +552,8 @@ export default function TeacherProfilePage() {
                     onClick={() => { setSelectedDate(opt.dateStr); setSelectedTime(''); }}
                     className={`flex flex-col items-center gap-0.5 min-w-[52px] p-1.5 rounded-xl border transition-all ${
                       selectedDate === opt.dateStr
-                        ? 'border-primary-500 bg-primary-50'
-                        : 'border-gray-100 bg-gray-50 hover:border-primary-500'
+                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                        : 'border-gray-100 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:border-primary-500'
                     }`}
                   >
                     <span className={`text-[9px] font-bold uppercase ${
@@ -546,18 +571,18 @@ export default function TeacherProfilePage() {
               const slots = dateOptions.find(o => o.dateStr === selectedDate)?.slots || [];
               return slots.length > 0 ? (
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">{t('time')}</label>
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">{t('time')}</label>
                   <div className="flex flex-wrap gap-1.5">
                     {slots.map((slot) => (
                       <button
                         key={slot.startTime}
                         type="button"
                         onClick={() => setSelectedTime(slot.startTime)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                          selectedTime === slot.startTime
-                            ? 'border-primary-500 bg-primary-50 text-primary-700'
-                            : 'border-gray-100 bg-gray-50 text-gray-700 hover:border-primary-500'
-                        }`}
+                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                           selectedTime === slot.startTime
+                             ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
+                             : 'border-gray-100 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-primary-500'
+                         }`}
                       >
                         {slot.startTime} - {slot.endTime}
                       </button>
@@ -576,11 +601,11 @@ export default function TeacherProfilePage() {
                     <button
                       type="button"
                       onClick={() => setLessonType('ONLINE')}
-                      className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
-                        lessonType === 'ONLINE'
-                          ? 'border-primary-500 bg-primary-50 text-primary-700'
-                          : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-primary-500'
-                      }`}
+                       className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
+                         lessonType === 'ONLINE'
+                           ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
+                           : 'border-gray-100 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:border-primary-500'
+                       }`}
                     >
                       {t('onlineLesson')}
                     </button>
@@ -591,8 +616,8 @@ export default function TeacherProfilePage() {
                       onClick={() => setLessonType('IN_PERSON')}
                       className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
                         lessonType === 'IN_PERSON'
-                          ? 'border-primary-500 bg-primary-50 text-primary-700'
-                          : 'border-gray-100 bg-gray-50 text-gray-600 hover:border-primary-500'
+                          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
+                          : 'border-gray-100 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:border-primary-500'
                       }`}
                     >
                       {t('inPersonLesson')}
@@ -605,7 +630,7 @@ export default function TeacherProfilePage() {
             <div>
               <label className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2 block">{t('message')}</label>
               <textarea
-                className="w-full h-28 rounded-2xl border border-gray-200 px-4 py-3 text-sm font-medium resize-none text-gray-900"
+                className="w-full h-28 rounded-2xl border border-gray-200 dark:border-gray-600 px-4 py-3 text-sm font-medium resize-none text-gray-900 dark:text-gray-100 dark:bg-gray-700"
                 placeholder={t('messagePlaceholder')}
                 value={bookingMessage}
                 onChange={e => setBookingMessage(e.target.value)}
@@ -625,6 +650,56 @@ export default function TeacherProfilePage() {
         </div>
       )}
 
+      {showReportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => { if (!reportSent) setShowReportModal(false); }}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md p-5 sm:p-8 space-y-4 sm:space-y-6 mx-2 sm:mx-0" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{t('reportTitle')}</h3>
+              <button onClick={() => { setShowReportModal(false); setReportSent(false); setReportReason(''); setReportDescription(''); }} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700">
+                <X className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+              </button>
+            </div>
+            {reportSent ? (
+              <p className="text-center text-green-600 dark:text-green-400 font-bold py-8">{t('reportSuccess')}</p>
+            ) : (
+              <>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">{t('reportReason')}</label>
+                  <select
+                    value={reportReason}
+                    onChange={e => setReportReason(e.target.value)}
+                    className="w-full h-12 rounded-2xl border border-gray-200 dark:border-gray-600 px-4 text-sm font-medium bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  >
+                    <option value="">{t('reportReason')}</option>
+                    <option value="fake">{t('reportReasons.fake')}</option>
+                    <option value="wrong">{t('reportReasons.wrong')}</option>
+                    <option value="harassment">{t('reportReasons.harassment')}</option>
+                    <option value="spam">{t('reportReasons.spam')}</option>
+                    <option value="other">{t('reportReasons.other')}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">{t('reportDescription')}</label>
+                  <textarea
+                    className="w-full h-28 rounded-2xl border border-gray-200 dark:border-gray-600 px-4 py-3 text-sm font-medium resize-none text-gray-900 dark:text-gray-100 dark:bg-gray-700"
+                    placeholder={t('reportDescription')}
+                    value={reportDescription}
+                    onChange={e => setReportDescription(e.target.value)}
+                  />
+                </div>
+                <Button
+                  className="w-full h-14 rounded-2xl font-bold text-base shadow-lg"
+                  onClick={handleReport}
+                  disabled={!reportReason || sendingReport}
+                >
+                  {sendingReport ? t('sending') : t('report')}
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
@@ -633,7 +708,7 @@ export default function TeacherProfilePage() {
 function ProfileSkeleton({ locale }: { locale: string }) {
   return (
     <div className="animate-pulse space-y-8 sm:space-y-12">
-       <div className="h-48 sm:h-64 bg-gray-100 lg:h-96" />
+       <div className="h-48 sm:h-64 bg-gray-100 dark:bg-gray-800 lg:h-96" />
        <div className="mx-auto max-w-6xl px-4 -mt-16 sm:-mt-24 lg:-mt-32 flex flex-col items-center sm:items-start gap-6 sm:gap-10">
           <div className="h-28 w-28 sm:h-48 sm:w-48 rounded-[1.5rem] sm:rounded-[3.5rem] bg-gray-200 lg:h-64 lg:w-64" />
           <div className="flex-1 space-y-3 sm:space-y-4">

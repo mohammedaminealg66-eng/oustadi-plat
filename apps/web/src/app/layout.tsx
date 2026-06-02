@@ -44,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
-      <body className={`${inter.variable} ${notoArabic.variable} font-sans min-h-screen bg-gray-50 text-gray-900 antialiased`}>
+      <body className={`${inter.variable} ${notoArabic.variable} font-sans min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
             <NotifierShell>

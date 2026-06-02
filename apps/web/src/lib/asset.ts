@@ -8,6 +8,13 @@ export function getAvatarUrl(key: string | null | undefined): string {
   return API_ORIGIN + '/' + key;
 }
 
+export function getFileUrl(path: string | null | undefined): string {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (path.startsWith('/')) return API_ORIGIN + path;
+  return API_ORIGIN + '/' + path;
+}
+
 export function getYouTubeEmbedUrl(url: string): string {
   if (!url) return '';
   let clean = url.trim();

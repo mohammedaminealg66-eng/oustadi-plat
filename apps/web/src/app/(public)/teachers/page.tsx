@@ -49,7 +49,7 @@ function FilterContent({ filters, setFilter, subjects }: {
           <Search className="absolute right-3.5 top-3.5 h-4 w-4 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
           <input value={filters.query} onChange={(e) => setFilter('query', e.target.value)}
             placeholder={h('searchPlaceholder')}
-            className="w-full rounded-2xl border border-gray-100 bg-gray-50/50 py-3 pr-10 pl-4 text-sm font-medium focus:bg-white focus:ring-4 focus:ring-primary-500/5 focus:border-primary-500 transition-all outline-none" />
+            className="w-full rounded-2xl border border-gray-100 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 py-3 pr-10 pl-4 text-sm font-medium focus:bg-white dark:focus:bg-gray-700 focus:ring-4 focus:ring-primary-500/5 focus:border-primary-500 transition-all outline-none text-gray-900 dark:text-gray-100" />
         </div>
       </div>
 
@@ -57,9 +57,9 @@ function FilterContent({ filters, setFilter, subjects }: {
         <h3 className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{t('filters')}</h3>
         
         <div className="space-y-1.5">
-          <label className="text-xs font-black text-gray-700 ml-1">{t('subject')}</label>
+          <label className="text-xs font-black text-gray-700 dark:text-gray-300 ml-1">{t('subject')}</label>
           <select value={filters.subjectId} onChange={(e) => setFilter('subjectId', e.target.value)}
-            className="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-3.5 py-2.5 text-sm font-bold focus:bg-white focus:border-primary-500 outline-none transition-all cursor-pointer">
+            className="w-full rounded-xl border border-gray-100 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 px-3.5 py-2.5 text-sm font-bold focus:bg-white dark:focus:bg-gray-700 focus:border-primary-500 outline-none transition-all cursor-pointer text-gray-900 dark:text-gray-100">
             <option value="">{c('all')}</option>
             {subjects.map((s) => (
               <option key={s.id} value={s.id}>{subjectName(s, locale)}</option>
@@ -68,9 +68,9 @@ function FilterContent({ filters, setFilter, subjects }: {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-black text-gray-700 ml-1">{t('level')}</label>
+          <label className="text-xs font-black text-gray-700 dark:text-gray-300 ml-1">{t('level')}</label>
           <select value={filters.level} onChange={(e) => setFilter('level', e.target.value)}
-            className="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-3.5 py-2.5 text-sm font-bold focus:bg-white focus:border-primary-500 outline-none transition-all cursor-pointer">
+            className="w-full rounded-xl border border-gray-100 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 px-3.5 py-2.5 text-sm font-bold focus:bg-white dark:focus:bg-gray-700 focus:border-primary-500 outline-none transition-all cursor-pointer text-gray-900 dark:text-gray-100">
             <option value="">{c('all')}</option>
             {levels.map((l) => (
               <option key={l} value={l}>{l === 'université' ? t('universityLevel') : l}</option>
@@ -79,10 +79,10 @@ function FilterContent({ filters, setFilter, subjects }: {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-black text-gray-700 ml-1">{t('city')}</label>
+          <label className="text-xs font-black text-gray-700 dark:text-gray-300 ml-1">{t('city')}</label>
           <input value={filters.city} onChange={(e) => setFilter('city', e.target.value)}
             placeholder={t('city')}
-            className="w-full rounded-xl border border-gray-100 bg-gray-50/50 px-3.5 py-2.5 text-sm font-bold focus:bg-white focus:border-primary-500 outline-none transition-all" />
+            className="w-full rounded-xl border border-gray-100 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700/50 px-3.5 py-2.5 text-sm font-bold focus:bg-white dark:focus:bg-gray-700 focus:border-primary-500 outline-none transition-all text-gray-900 dark:text-gray-100" />
         </div>
 
         <div className="space-y-3 pt-2">
@@ -96,7 +96,7 @@ function FilterContent({ filters, setFilter, subjects }: {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-black text-gray-700 ml-1">{t('teachingMode')}</label>
+          <label className="text-xs font-black text-gray-700 dark:text-gray-300 ml-1">{t('teachingMode')}</label>
           <div className="grid grid-cols-2 gap-2">
             {teachingModes.map((v) => (
               <button 
@@ -104,9 +104,9 @@ function FilterContent({ filters, setFilter, subjects }: {
                 onClick={() => setFilter('teachingMode', filters.teachingMode === v ? '' : v)}
                 className={cn(
                   "px-3 py-2 text-[10px] font-black uppercase tracking-tight rounded-xl border transition-all",
-                  filters.teachingMode === v 
-                    ? "bg-primary-600 border-primary-600 text-white shadow-md shadow-primary-500/20" 
-                    : "bg-white border-gray-100 text-gray-500 hover:border-gray-200"
+                    filters.teachingMode === v 
+                      ? "bg-primary-600 border-primary-600 text-white shadow-md shadow-primary-500/20" 
+                      : "bg-white dark:bg-gray-700 border-gray-100 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-gray-200"
                 )}
               >
                 {t(modeKey[v])}
@@ -120,7 +120,7 @@ function FilterContent({ filters, setFilter, subjects }: {
         <label className="flex items-center gap-3 group cursor-pointer">
           <div className={cn(
             "h-5 w-5 rounded-md border-2 transition-all flex items-center justify-center",
-            filters.verifiedOnly ? "bg-primary-600 border-primary-600 shadow-sm" : "border-gray-200 group-hover:border-primary-300"
+            filters.verifiedOnly ? "bg-primary-600 border-primary-600 shadow-sm" : "border-gray-200 dark:border-gray-500 group-hover:border-primary-300"
           )}>
             {filters.verifiedOnly && <VerifiedBadge className="h-3 w-3 text-white" />}
           </div>
@@ -256,14 +256,14 @@ export default function TeachersPage() {
         />
         <div className="flex flex-col gap-4 sm:gap-6 mb-8 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight lg:text-5xl">{h('searchTeachers')}</h1>
-            <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-bold text-gray-400">{teachers.length} {t('teachersFound')}</p>
+            <h1 className="text-2xl sm:text-4xl font-black text-gray-900 dark:text-gray-100 tracking-tight lg:text-5xl">{h('searchTeachers')}</h1>
+            <p className="mt-1 sm:mt-2 text-xs sm:text-sm font-bold text-gray-400 dark:text-gray-500">{teachers.length} {t('teachersFound')}</p>
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative group">
               <ChevronDown className="absolute left-2.5 top-2.5 sm:left-3.5 sm:top-3.5 h-3.5 w-3.5 sm:h-4 sm:w-4 text-gray-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
               <select value={filters.sort} onChange={(e) => setFilter('sort', e.target.value)}
-                className="appearance-none rounded-xl sm:rounded-2xl border-2 border-gray-100 bg-white px-3 sm:px-5 py-2 sm:py-3 pr-8 sm:pr-10 text-[11px] sm:text-sm font-black focus:border-primary-500 outline-none transition-all cursor-pointer hover:border-gray-200">
+                className="appearance-none rounded-xl sm:rounded-2xl border-2 border-gray-100 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 sm:px-5 py-2 sm:py-3 pr-8 sm:pr-10 text-[11px] sm:text-sm font-black focus:border-primary-500 outline-none transition-all cursor-pointer hover:border-gray-200 text-gray-900 dark:text-gray-100">
                 {sortOptions.map((v) => (
                   <option key={v} value={v}>{t(sortKey[v])}</option>
                 ))}
@@ -280,7 +280,7 @@ export default function TeachersPage() {
 
         <div className="flex gap-10">
           <aside className="hidden w-72 shrink-0 lg:block">
-            <div className="rounded-[2rem] border border-gray-100 bg-white p-8 sticky top-24 shadow-soft">
+            <div className="rounded-[2rem] border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 p-8 sticky top-24 shadow-soft">
               <FilterContent filters={filters} setFilter={setFilter} subjects={subjects} />
             </div>
           </aside>
@@ -289,7 +289,7 @@ export default function TeachersPage() {
             {loading && teachers.length === 0 ? (
               <div className="grid gap-6 md:grid-cols-2">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <Card key={i} className="overflow-hidden border-none bg-white rounded-xl sm:rounded-2xl">
+                  <Card key={i} className="overflow-hidden border-none bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl">
                     <CardContent className="p-5 sm:p-6">
                       <div className="flex items-start gap-3 sm:gap-5">
                         <Skeleton className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl" />
@@ -329,7 +329,7 @@ export default function TeachersPage() {
                 <div className="grid gap-6 md:grid-cols-2">
                   {teachers.map((teacher) => (
                     <Link key={teacher.id} href={`/teachers/${teacher.id}`} className="group">
-                      <Card className="h-full border-none shadow-sm sm:shadow-soft group-hover:shadow-premium-hover transition-all duration-300 rounded-xl sm:rounded-[2rem] overflow-hidden">
+                      <Card className="h-full border-none bg-white dark:bg-gray-800 shadow-sm sm:shadow-soft group-hover:shadow-premium-hover transition-all duration-300 rounded-xl sm:rounded-[2rem] overflow-hidden">
                         <CardContent className="p-5 sm:p-7">
                           <div className="flex items-start gap-3 sm:gap-4">
                             <div className="relative shrink-0">
@@ -344,7 +344,7 @@ export default function TeachersPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 flex-wrap mb-1">
-                                <h3 className="text-base sm:text-lg font-black text-gray-900 tracking-tight group-hover:text-primary-600 transition-colors truncate">{teacher.fullName}</h3>
+                                <h3 className="text-base sm:text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight group-hover:text-primary-600 transition-colors truncate">{teacher.fullName}</h3>
                                 {teacher.isOfficial ? (
                                   <OfficialBadge className="scale-75 sm:scale-90 origin-right" />
                                 ) : teacher.isVerified ? (
@@ -373,20 +373,20 @@ export default function TeachersPage() {
                           </div>
 
                           {teacher.bio && (
-                            <p className="mt-4 sm:mt-5 text-xs sm:text-sm font-medium text-gray-500 line-clamp-2 leading-relaxed">
+                            <p className="mt-4 sm:mt-5 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
                               {teacher.bio}
                             </p>
                           )}
 
                           <div className="mt-4 sm:mt-6 flex flex-wrap gap-2">
                             {teacher.subjects?.slice(0, 3).map((s: any) => (
-                              <span key={s.id} className="rounded-lg sm:rounded-xl bg-gray-50 border border-gray-100 px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-black text-gray-600 group-hover:bg-primary-50 group-hover:border-primary-100 group-hover:text-primary-700 transition-colors">
+                              <span key={s.id} className="rounded-lg sm:rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-black text-gray-600 dark:text-gray-300 group-hover:bg-primary-50 group-hover:border-primary-100 group-hover:text-primary-700 transition-colors">
                                 {subjectName(s, locale)}
                               </span>
                             ))}
                           </div>
 
-                          <div className="mt-5 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-50 flex items-center justify-between">
+                            <div className="mt-5 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between">
                             <div className="flex items-center gap-2 sm:gap-4">
                               <span className="text-[10px] sm:text-[11px] font-black text-gray-400 uppercase tracking-widest">
                                 {teacher.experience || 0} {t('yearsExperience')}
@@ -424,16 +424,16 @@ export default function TeachersPage() {
       {showFilters && (
         <div className="fixed inset-0 z-[120] lg:hidden">
           <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-md" onClick={() => setShowFilters(false)} />
-          <div className="absolute bottom-0 left-0 right-0 max-h-[92vh] overflow-y-auto rounded-t-[2rem] bg-white p-6 sm:p-8 shadow-2xl animate-in slide-in-from-bottom duration-500 ease-out">
+          <div className="absolute bottom-0 left-0 right-0 max-h-[92vh] overflow-y-auto rounded-t-[2rem] bg-white dark:bg-gray-800 p-6 sm:p-8 shadow-2xl animate-in slide-in-from-bottom duration-500 ease-out">
             <div className="mb-6 flex items-center justify-between">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">{t('filters')}</h2>
+                <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-gray-100 tracking-tight">{t('filters')}</h2>
                 <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{teachers.length} {t('teachersCount')}</p>
               </div>
               <button onClick={() => setShowFilters(false)} className="h-10 w-10 flex items-center justify-center rounded-xl bg-gray-50 text-gray-400 hover:text-gray-600 transition-all"><X className="h-5 w-5" /></button>
             </div>
             <FilterContent filters={filters} setFilter={setFilter} subjects={subjects} />
-            <div className="sticky bottom-0 mt-8 pt-4 pb-2 bg-white flex gap-3">
+            <div className="sticky bottom-0 mt-8 pt-4 pb-2 bg-white dark:bg-gray-800 flex gap-3">
               <Button variant="outline" className="flex-1 h-12 rounded-xl font-black" onClick={resetFilters}>{c('reset')}</Button>
               <Button className="flex-[2] h-12 rounded-xl font-black shadow-lg shadow-primary-500/20" onClick={() => setShowFilters(false)}>{c('apply')}</Button>
             </div>

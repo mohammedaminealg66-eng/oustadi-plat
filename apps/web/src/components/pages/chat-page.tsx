@@ -8,7 +8,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useAuth } from '@/providers/auth-provider';
 import { apiRequest, getTokens } from '@/lib/api';
 import { getSocket } from '@/lib/socket-client';
-import { getAvatarUrl } from '@/lib/asset';
+import { getAvatarUrl, getFileUrl } from '@/lib/asset';
 import { Button, Input } from '@oustadi/ui';
 import { ArrowRight, Send, User, MessageSquare, ChevronLeft, Menu, Paperclip, Mic, Smile, Play, Pause, StopCircle, FileText, Clock, X } from 'lucide-react';
 
@@ -395,16 +395,16 @@ export default function ChatPage({ dashboardHref }: { dashboardHref: string }) {
                           )}
                         {msg.fileUrl && (
                           msgType === 'IMAGE' ? (
-                            <img src={msg.fileUrl} alt="" className="mb-2 max-h-64 rounded-lg object-cover" />
+                            <img src={getFileUrl(msg.fileUrl)} alt="" className="mb-2 max-h-64 rounded-lg object-cover" />
                           ) : msgType === 'FILE' ? (
-                            <a href={msg.fileUrl} download={msg.fileName} className={`flex items-center gap-2 rounded-lg p-2 ${isSenderAdmin && !isMine ? 'bg-indigo-700' : isMine ? 'bg-primary-700' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                            <a href={getFileUrl(msg.fileUrl)} download={msg.fileName} className={`flex items-center gap-2 rounded-lg p-2 ${isSenderAdmin && !isMine ? 'bg-indigo-700' : isMine ? 'bg-primary-700' : 'bg-gray-100 dark:bg-gray-700'}`}>
                               <FileText className="h-4 w-4" />
                               <span className="text-xs truncate">{msg.fileName}</span>
                               {msg.fileSize && <span className="text-[10px] opacity-60">{formatFileSize(msg.fileSize)}</span>}
                             </a>
                           ) : msgType === 'VOICE' ? (
                             <div className="flex items-center gap-2">
-                              <button onClick={() => playAudio(msg.fileUrl!, msg.id)} className={`rounded-full p-1.5 ${isSenderAdmin && !isMine ? 'bg-indigo-700' : isMine ? 'bg-primary-700' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                              <button onClick={() => playAudio(getFileUrl(msg.fileUrl!), msg.id)} className={`rounded-full p-1.5 ${isSenderAdmin && !isMine ? 'bg-indigo-700' : isMine ? 'bg-primary-700' : 'bg-gray-100 dark:bg-gray-700'}`}>
                                 {playingAudio === msg.id ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                               </button>
                               <div className="flex-1">
