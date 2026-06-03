@@ -78,9 +78,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           <div className="mt-auto pt-6 border-t border-gray-50 dark:border-gray-800">
             <div className="rounded-2xl bg-gray-50 p-4 dark:bg-gray-800">
               <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3 dark:text-gray-500">{t('common.needHelp')}</p>
-              <a href="mailto:contact@oustadi.tech" className="text-xs font-bold text-primary-600 hover:underline">
+              <Link href="/help" className="text-xs font-bold text-primary-600 hover:underline">
                 {t('common.contactSupport')}
-              </a>
+              </Link>
             </div>
           </div>
         </div>
