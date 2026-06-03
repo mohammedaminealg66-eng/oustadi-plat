@@ -77,7 +77,7 @@ export function GlobalHeader() {
           </button>
           <Link href="/" className="flex items-center gap-1.5 shrink-0 active:scale-95 transition-transform">
             <img src="/logo.png" alt="Oustadi" className="h-7 w-7 sm:h-8 sm:w-8 shrink-0 drop-shadow-sm" />
-            <span className="text-lg sm:text-xl font-black text-gray-900 tracking-tighter whitespace-nowrap shrink-0 hidden min-[360px]:inline">{t('common.appName')}</span>
+            <span className="text-lg sm:text-xl font-black text-gray-900 tracking-tighter whitespace-nowrap shrink-0 hidden min-[360px]:inline dark:text-white">{t('common.appName')}</span>
           </Link>
         </div>
 
@@ -190,7 +190,7 @@ export function GlobalHeader() {
           <div className="flex items-center justify-between mb-10">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 active:scale-95 transition-transform shrink-0">
               <img src="/logo.png" alt="Oustadi" className="h-8 w-8 drop-shadow-sm shrink-0" />
-              <span className="font-black text-gray-900 text-xl tracking-tighter whitespace-nowrap shrink-0">{t('common.appName')}</span>
+              <span className="font-black text-gray-900 text-xl tracking-tighter whitespace-nowrap shrink-0 dark:text-white">{t('common.appName')}</span>
             </Link>
             <button onClick={() => setMobileMenuOpen(false)} className="h-10 w-10 flex items-center justify-center rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all">
               <X className="h-6 w-6" />

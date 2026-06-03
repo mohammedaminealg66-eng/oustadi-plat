@@ -34,7 +34,7 @@ export function Footer() {
           <div className="space-y-4 sm:space-y-6 text-left">
             <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-900 dark:text-gray-100">{t('support')}</h4>
             <nav className="flex flex-col gap-3 sm:gap-4">
-              <Link href="/help" className="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-primary-600 transition-colors">{t('contactSupport')}</Link>
+              <a href="mailto:contact@oustadi.tech" className="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-primary-600 transition-colors">{t('contactSupport')}</a>
               <Link href="/terms" className="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-primary-600 transition-colors">{t('terms')}</Link>
               <Link href="/privacy" className="text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-primary-600 transition-colors">{t('privacy')}</Link>
             </nav>

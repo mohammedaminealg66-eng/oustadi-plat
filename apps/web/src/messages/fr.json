@@ -616,7 +616,7 @@
     "liabilityTitle": "Limitation de responsabilité",
     "liabilityContent": "La plateforme agit en tant qu'intermédiaire entre les enseignants et les étudiants et n'assume pas la responsabilité de la qualité des services éducatifs fournis. Les services sont fournis « tels quels » sans garantie.\n\nLa plateforme n'est pas responsable des dommages indirects ou consécutifs résultant de l'utilisation de la plateforme. En tout état de cause, la responsabilité de la plateforme est limitée au montant de la commission payée pour le service concerné.",
     "contactTitle": "Informations de contact",
-    "contactContent": "Pour toute question ou réclamation, vous pouvez nous contacter :\n• Par email : support@oustadi.ma\n• Via la page d'assistance de la plateforme\n• Via le système de règlement des litiges intégré\nNous nous engageons à répondre à toutes les demandes dans les plus brefs délais.",
+    "contactContent": "Pour toute question ou réclamation, vous pouvez nous contacter :\n• Par email : contact@oustadi.tech\n• Via la page d'assistance de la plateforme\n• Via le système de règlement des litiges intégré\nNous nous engageons à répondre à toutes les demandes dans les plus brefs délais.",
     "privacyTitle": "Politique de confidentialité",
     "privacyDesc": "Politique de confidentialité de la plateforme éducative Oustadi",
     "pinfoTitle": "Informations collectées",
@@ -640,6 +640,6 @@
     "psecurityTitle": "Sécurité",
     "psecurityContent": "Nous nous engageons à protéger vos données personnelles en utilisant les mesures de sécurité suivantes :\n• Chiffrement des données en transit (SSL/TLS)\n• Stockage des mots de passe cryptés\n• Pare-feu et systèmes de détection d'intrusion\n• Révisions de sécurité régulières\n• Accès aux données limité selon les autorisations\n• Formation du personnel à la confidentialité des données\nMalgré ces mesures, la sécurité absolue des données transmises via Internet ne peut être garantie.",
     "pcontactTitle": "Informations de contact",
-    "pcontactContent": "Pour toute question relative à la politique de confidentialité, vous pouvez nous contacter :\n• Par email : privacy@oustadi.ma\n• Via la page de contact de la plateforme\nNous répondons à toutes les demandes relatives à la confidentialité dans un délai de 30 jours."
+    "pcontactContent": "Pour toute question relative à la politique de confidentialité, vous pouvez nous contacter :\n• Par email : contact@oustadi.tech\n• Via la page de contact de la plateforme\nNous répondons à toutes les demandes relatives à la confidentialité dans un délai de 30 jours."
   }
 }
